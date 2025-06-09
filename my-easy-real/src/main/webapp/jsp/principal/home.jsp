@@ -11,7 +11,7 @@
             <link href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css' rel='stylesheet'>
             <link rel="stylesheet"
                 href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-            <script src="js/scriptHome.js" defer></script>
+            <script src="<c:url value='/assets/js/scriptHome.js' />" defer></script>
             <title>Home</title>
         </head>
 
@@ -88,7 +88,7 @@
 
                 <div class="modal-container">
                     <div class="modal">
-                        <form id="formMovimentacao" action="<%=request.getContextPath()%>/ServletFluxoCaixaController">
+                        <form id="formMovimentacao" action="${pageContext.request.contextPath}/ServletFluxoCaixaController">
                             <div class="newItem">
 
                                 <div class="divData">

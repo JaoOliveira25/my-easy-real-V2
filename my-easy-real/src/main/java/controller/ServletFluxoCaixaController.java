@@ -6,6 +6,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import dao.DAOFluxoCaixaRepository;
 import jakarta.servlet.RequestDispatcher;
@@ -28,18 +30,21 @@ public class ServletFluxoCaixaController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
 			String acao = request.getParameter("acao");
-			
 			if(acao != null && !acao.trim().isEmpty() && acao.equalsIgnoreCase("carregarFluxoCaixa")) {
 				//Esse único método serve para se caso o usuario somente clicar na seta que altera o mês
-				Long usuarioPaiId = (long) request.getSession().getAttribute("usuarioLogado");
+				Long usuarioPaiId = (long) request.getSession().getAttribute("usuarioLogadoId");
 				int mesParam = Integer.parseInt(request.getParameter("mes"));
 				int mesSql = mesParam +1;
 				int ano = Integer.parseInt(request.getParameter("ano"));
 			
 				List<ModelFluxoCaixa> fluxoCaixa = daoFluxoCaixa.carregarMovimentacoes(usuarioPaiId,mesSql,ano);
 				
-				ObjectMapper objetcMapper = new ObjectMapper();
-				String jsonFluxoCaixa = objetcMapper.writeValueAsString(fluxoCaixa);
+				ObjectMapper objectMapper = new ObjectMapper();
+				objectMapper.registerModule(new JavaTimeModule());
+				objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
+				
+				String jsonFluxoCaixa = objectMapper.writeValueAsString(fluxoCaixa);
 				response.getWriter().write(jsonFluxoCaixa);
 		
 			}
