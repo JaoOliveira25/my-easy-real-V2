@@ -117,6 +117,13 @@ public class ServletFluxoCaixaController extends HttpServlet {
 					
 				}else if("deletar".equalsIgnoreCase(acao.trim())) {
 					//lógica de editar no bd método que deleta pelo ID 
+					String idParam = request.getParameter("idMovimentacao");
+					Long idMovimentacao = Long.parseLong(idParam);
+					
+					daoFluxoCaixa.deletarMovimentacao(idMovimentacao);
+					
+					request.getRequestDispatcher("jsp/principal/home.jsp").forward(request, response);
+				
 				}
 			}
 		} catch (Exception e) {
