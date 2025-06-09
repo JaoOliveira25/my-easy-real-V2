@@ -1,0 +1,208 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    font-family: Inter, sans-serif;
+}
+
+body{
+    background-color: #0d6f73;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+}
+
+.container{
+   
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-top: 100px;
+    
+    
+}
+
+.card{
+    background-color: #fcf3e3 ;
+    padding: 30px;
+    border: 1px solid #fcf3e3;
+    border-radius: 10px;
+    margin: 10px;
+    width: 300px;
+}
+
+
+h1{
+    text-align: center;
+    margin-bottom: 20px;
+    color: 	black;
+}
+
+
+.label-float input{
+    color: black;
+    width: 100%;
+    padding: 5px 5px;
+    display: inline-block;
+    border: 0;
+    border-bottom:2px solid rgb(98, 92, 92);
+    background-color: transparent;
+    outline: none;
+    min-width: 180px;
+    font-size: 16px;
+    transition: all .3s ease-out;
+    border-radius: 0;
+    
+}
+
+.label-float{
+    position: relative;
+    padding-top: 13px;
+    margin-top: 5%;
+    margin-bottom: 5%;
+
+}
+
+.label-float label{
+    color: black;
+    pointer-events: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin-top: 13px;
+    transition: all .3s ease-out;
+}
+
+
+.label-float input:focus + label,
+.label-float input:valid + label {
+    font-size: 13px;
+    margin-top: 0;
+    color: black;
+}
+
+
+#olho1, #olho2{
+    position: absolute;
+    top: 20px;
+    right: 10px;
+    cursor: pointer;
+    color: rgb(36, 35, 35);
+}
+
+button{
+    background-color: transparent;
+    color: black;
+    border: black 2px solid;
+    border-radius: 4px;
+    padding: 7px;
+    margin-top: 20px;
+    cursor: pointer;
+    font-size: 12pt;
+    outline: none;
+    transition: all .4s ease-out;
+
+
+}
+
+#close-modal{
+    padding: 0.6rem 1.2rem;
+    background-color: #888;
+    color: white;
+    border: none;
+    border-radius: 0.25rem;
+    cursor : pointer;
+    opacity: 0.8;
+    font-size: 1rem;
+    transition: 0.4s;
+}
+
+button:hover{
+    background-color: #0d6f73;
+    color: white;
+    height: 35%;
+    width: 35%;
+    transition: all .4s ease-out;
+
+}
+
+.justify-center{
+    display: flex;
+    justify-content: center;
+}
+
+#msgErrorCad{
+   
+    text-align: center;
+    background-color: #b2817e;
+    color: #d12316;
+    font-size: 14px;
+    padding: 5px;
+    border-radius: 4px;
+    display: none;
+    
+}
+
+#msgSuccesCad{
+    text-align: center;
+    font-size: 14px;
+    background-color: #7d9e68;
+    color: #13e14a;
+    padding: 5px;
+    border-radius: 4px;
+    display: none;
+    
+}
+
+#fade, #modal {
+    transition: 0.5s;
+    opacity: 1;
+    pointer-events: all;
+}
+
+#fade{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 5;
+}
+
+#modal{
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    width:500px;
+    max-width: 90%;
+    padding: 1.2rem;
+    border-radius: 0.5rem;
+    z-index: 10;
+}
+
+.modal-header{
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   margin-bottom: 1rem;
+   padding-bottom: 1rem;
+
+}
+
+.modal-body{
+    margin-bottom: 1rem;
+
+}
+
+#modal.hide, #fade.hide {
+    opacity: 0;
+    pointer-events: none;
+}
+
+#modal.hide {
+    top: 0;
+}

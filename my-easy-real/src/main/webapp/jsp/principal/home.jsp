@@ -1,0 +1,124 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+        <!DOCTYPE html>
+        <html lang="pt-br">
+
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <link rel="stylesheet" href="<c:url value='/assets/css/styleHome.css' />">
+            <link href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css' rel='stylesheet'>
+            <link rel="stylesheet"
+                href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+            <script src="js/scriptHome.js" defer></script>
+            <title>Home</title>
+        </head>
+
+        <body>
+            <main>
+
+                <div class="profile-container">
+                    <div class="profile-photo">
+                        <img src="${pageContext.request.contextPath}/assets/img/perfil.png" alt="">
+                    </div>
+
+                    <div class="campo-nome">
+                        <span class="profile-name">Seja bem vindo ao My Rasy Real</span>
+                    </div>
+
+                    <div class="editarPerfil">
+                        <a href="${pageContext.request.contextPath}/jsp/principal/editarCadastro.jsp"><i
+                                class="fa-solid fa-gear gear"></i></a>
+                    </div>
+                </div>
+
+                
+
+
+                
+
+                <div class="resume-container">
+
+                    <h4>Saldo atual </h4>
+                    <span class="total">R$ 0.00</span>
+
+                    <div class="inc-exp-container">
+                        <div>
+                            <h4>Receitas </h4>
+                            <span class="total incomes">R$ 0.00</span>
+                        </div>
+                        <div>
+                            <h4>Despesas </h4>
+                            <span class="total expenses">R$ 0.00</span>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div class="tabela-container">
+                    <!--Estou planejando aqui colocar no lugar do título um filtro de dadas-->
+                    <div class="header">
+                        <span>Fluxo de Caixa</span>
+                        <button onclick="openModal()" id="new">Incluir</button>
+                    </div>
+
+                    <div id="tabelaFluxoCaixa" class="divTable"><!--Aqui vai ficar o as colunas de cada valor-->
+                    <table>
+                        <thead><!--Essa tag agrupa o cabeçalho de uma tabela-->
+                            <tr>
+                                <th>Data</th>
+                                <th>Descrição</th>
+                                <th>Valor</th>
+                                <th class="acao">Editar</th>
+                                <th class="acao">Excluir</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            
+                        </tbody>
+                    </table>
+                </div>
+
+                </div>
+
+                
+
+                <div class="modal-container">
+                    <div class="modal">
+                        <form id="formMovimentacao" action="<%=request.getContextPath()%>/ServletFluxoCaixaController">
+                            <div class="newItem">
+
+                                <div class="divData">
+                                    <label for="desc">Data</label>
+                                    <input type="date" id="data" name="dataMovimento">
+                                </div>
+
+                                <div class="divDesc">
+                                    <label for="desc">Descrição</label>
+                                    <input type="text" id="desc" name="descricao">
+                                </div>
+                                <div class="divAmount">
+                                    <label for="amount">Valor</label>
+                                    <input type="number" id="amount" name="valorMovimento">
+                                </div>
+                                <div class="divType">
+                                    <label for="type" >Tipo</label>
+                                    <select id="type" name="tipoMovimento">
+                                        <option value="E">Entrada</option>
+                                        <option value="S">Saída</option>1
+                                    </select>
+                                </div>
+                                <button id="btnSalvar">Lançar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+
+            </main>
+        </body>
+
+        </html>
