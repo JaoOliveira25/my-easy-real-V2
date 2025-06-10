@@ -9,8 +9,7 @@
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <link rel="stylesheet" href="<c:url value='/assets/css/styleHome.css' />">
             <link href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css' rel='stylesheet'>
-            <link rel="stylesheet"
-                href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
             <script src="<c:url value='/assets/js/scriptHome.js' />" defer></script>
             <title>Home</title>
         </head>
@@ -33,10 +32,10 @@
                     </div>
                 </div>
 
-                
 
 
-                
+
+
 
                 <div class="resume-container">
 
@@ -61,59 +60,44 @@
                     <!--Estou planejando aqui colocar no lugar do título um filtro de dadas-->
                     <div class="header">
                         <span>Fluxo de Caixa</span>
-                        <button onclick="openModal()" id="new">Incluir</button>
+                        <button onclick="openModal()" id="new">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
                     </div>
 
                     <div id="tabelaFluxoCaixa" class="divTable"><!--Aqui vai ficar o as colunas de cada valor-->
-                    <table>
-                        <thead><!--Essa tag agrupa o cabeçalho de uma tabela-->
-                            <tr>
-                                <th>Data</th>
-                                <th>Descrição</th>
-                                <th>Valor</th>
-                                <th class="acao">Editar</th>
-                                <th class="acao">Excluir</th>
-                            </tr>
-                        </thead>
+                        <table>
+                            <thead><!--Essa tag agrupa o cabeçalho de uma tabela-->
+                                <tr>
+                                    <th>Data</th>
+                                    <th>Descrição</th>
+                                    <th>Valor</th>
+                                    <th class="acao">Editar</th>
+                                    <th class="acao">Excluir</th>
+                                </tr>
+                            </thead>
 
-                        <tbody>
-                            
-                        </tbody>
-                    </table>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+
                 </div>
 
-                </div>
 
-                
 
-                <div class="modal-container">
-                    <div class="modal">
-                        <form id="formMovimentacao" action="${pageContext.request.contextPath}/ServletFluxoCaixaController">
-                            <div class="newItem">
+                <div id="fade" class="hide">
+                    <div id="modal" class="hide">
+                        <div class="modal-header">
+                            <h2>Confirme seu cadastro</h2>
+                            <button id="close-modal">fechar</button>
+                        </div>
 
-                                <div class="divData">
-                                    <label for="desc">Data</label>
-                                    <input type="date" id="data" name="dataMovimento">
-                                </div>
-
-                                <div class="divDesc">
-                                    <label for="desc">Descrição</label>
-                                    <input type="text" id="desc" name="descricao">
-                                </div>
-                                <div class="divAmount">
-                                    <label for="amount">Valor</label>
-                                    <input type="number" id="amount" name="valorMovimento">
-                                </div>
-                                <div class="divType">
-                                    <label for="type" >Tipo</label>
-                                    <select id="type" name="tipoMovimento">
-                                        <option value="E">Entrada</option>
-                                        <option value="S">Saída</option>1
-                                    </select>
-                                </div>
-                                <button id="btnSalvar">Lançar</button>
-                            </div>
-                        </form>
+                        <div class="modal-body">
+                            <p>Estamos quase lá enviamos no seu email <strong>em****@hotmail.com</strong> o link para
+                                confirmação do seu cadastro não esqueça de olhar sua caixa de span! </p>
+                        </div>
                     </div>
                 </div>
 

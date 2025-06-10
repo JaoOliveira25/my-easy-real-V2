@@ -35,13 +35,13 @@ async function carregarMovimentacoes(){
 json.forEach(item =>{
 	const row = document.createElement('tr');
 	row.innerHTML = `<td>${item.dataMovimento}</td>
-			<td>${item.descricao}</td>
-			<td>R$ ${Number(item.valorMovimento).toFixed(2)}</td>
-			<td>
-			   <button data-id="${item.id}" onclick="editarMovimentacao(this, 'editar')"><i class="fa-solid fa-pen-to-square"></i></button>	
+			<td >${item.descricao}</td>
+			<td >R$ ${Number(item.valorMovimento).toFixed(2)}</td>
+			<td style="text-align: center;">
+			   <button data-id="${item.id}" onclick="editarMovimentacao(this, 'editar')" class="icon-button"><i class="fa-solid fa-pen-to-square"></i></button>	
 			</td>
-			<td>
-			   <button data-id="${item.id}" onclick="excluirMovimentacao(this, 'deletar')"><i class="fa-solid fa-trash"></i></button>
+			<td style="text-align: center;">
+			   <button data-id="${item.id}" onclick="excluirMovimentacao(this, 'deletar')" class="icon-button"><i class="fa-solid fa-trash-can"></i></button>
 			</td>`;
         tbody.appendChild(row);
 });
