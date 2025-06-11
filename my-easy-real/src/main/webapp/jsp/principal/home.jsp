@@ -60,8 +60,8 @@
                     <!--Estou planejando aqui colocar no lugar do título um filtro de dadas-->
                     <div class="header">
                         <span>Fluxo de Caixa</span>
-                        <button onclick="openModal()" id="new">
-                            <i class="fa-solid fa-plus"></i>
+                        <button id="open-modal-button">
+                            <i class="fa-solid fa-square-plus"></i>
                         </button>
                     </div>
 
@@ -87,20 +87,44 @@
 
 
 
-                <div id="fade" class="hide">
-                    <div id="modal" class="hide">
-                        <div class="modal-header">
-                            <h2>Confirme seu cadastro</h2>
-                            <button id="close-modal">fechar</button>
-                        </div>
-
-                        <div class="modal-body">
-                            <p>Estamos quase lá enviamos no seu email <strong>em****@hotmail.com</strong> o link para
-                                confirmação do seu cadastro não esqueça de olhar sua caixa de span! </p>
-                        </div>
+                <div id="fade" class="hide"></div>
+                <div id="modal" class="hide">
+                    <div class="modal-header">
+                        <h2>Incluir Movimentação</h2>
+                        <button id="close-modal">fechar</button>
                     </div>
-                </div>
+                    <form id="formMovimentacao" action="${pageContext.request.contextPath}/ServletFluxoCaixaController">
+                        <div class="modal-body">
+                            <div class="newItem">
 
+                                <div class="divType">
+                                    <label for="type">Tipo</label>
+                                    <select id="type" name="tipoMovimento">
+                                        <option value="E">Entrada</option>
+                                        <option value="S">Saída</option>1
+                                    </select>
+                                </div>
+
+                                <div class="divData">
+                                    <label for="desc">Data</label>
+                                    <input type="date" id="data" name="dataMovimento">
+                                </div>
+                                <div class="divAmount">
+                                    <label for="amount">Valor</label>
+                                    <input type="number" id="amount" name="valorMovimento">
+                                </div>
+                                <div class="divDesc">
+                                    <label for="desc">Descrição</label>
+                                    <input type="text" id="desc" name="descricao">
+                                </div>
+                                
+                                
+                                <button id="btnSalvar">Lançar</button>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
 
             </main>
         </body>

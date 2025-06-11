@@ -34,11 +34,11 @@ async function carregarMovimentacoes(){
 
 json.forEach(item =>{
 	const row = document.createElement('tr');
-	row.innerHTML = `<td>${item.dataMovimento}</td>
+	row.innerHTML = `<td>${item.dataMovimento.split('-').reverse().join('/').slice(0, 5)}</td>
 			<td >${item.descricao}</td>
 			<td >R$ ${Number(item.valorMovimento).toFixed(2)}</td>
 			<td style="text-align: center;">
-			   <button data-id="${item.id}" onclick="editarMovimentacao(this, 'editar')" class="icon-button"><i class="fa-solid fa-pen-to-square"></i></button>	
+			   <button data-id="${item.id}" onclick="openModal(this, 'editar')" class="icon-button"><i class="fa-solid fa-pen-to-square"></i></button>	
 			</td>
 			<td style="text-align: center;">
 			   <button data-id="${item.id}" onclick="excluirMovimentacao(this, 'deletar')" class="icon-button"><i class="fa-solid fa-trash-can"></i></button>
@@ -54,6 +54,18 @@ json.forEach(item =>{
 }
 
 
+const openModalButton = document.querySelector("#open-modal-button");//o botão que vai abrir meu modal é o cadastrar
+const closeModalButton = document.querySelector("#close-modal");
+const modal = document.querySelector("#modal");
+const fade = document.querySelector("#fade");
+
+const toggleModal = () => {
+    [modal, fade].forEach((el)=> el.classList.toggle("hide"));
+};
+
+[openModalButton, closeModalButton, fade].forEach((el)=>{
+    el.addEventListener("click", ()=> toggleModal());
+})
 
 
 
