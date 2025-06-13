@@ -9,7 +9,8 @@
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <link rel="stylesheet" href="<c:url value='/assets/css/styleHome.css' />">
             <link href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css' rel='stylesheet'>
-
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.9/jquery.inputmask.min.js"></script>
             <script src="<c:url value='/assets/js/scriptHome.js' />" defer></script>
             <title>Home</title>
         </head>
@@ -91,9 +92,11 @@
                 <div id="modal" class="hide">
                     <div class="modal-header">
                         <h2>Incluir Movimentação</h2>
-                        <button id="close-modal">fechar</button>
+                        <button id="close-modal">
+                            <i class="fa-solid fa-circle-xmark"></i>
+                        </button>
                     </div>
-                    <form id="formMovimentacao" action="${pageContext.request.contextPath}/ServletFluxoCaixaController">
+                    <form id="formMovimentacao" action="${pageContext.request.contextPath}/ServletFluxoCaixaController" method="post" >
                         <div class="modal-body">
                             <div class="newItem">
 
@@ -101,25 +104,26 @@
                                     <label for="type">Tipo</label>
                                     <select id="type" name="tipoMovimento">
                                         <option value="E">Entrada</option>
-                                        <option value="S">Saída</option>1
+                                        <option value="S">Saída</option>
                                     </select>
                                 </div>
 
                                 <div class="divData">
                                     <label for="desc">Data</label>
-                                    <input type="date" id="data" name="dataMovimento">
+                                    <input type="text" id="data" placeholder="dd/mm/aaaa" name="dataMovimento" maxlength="10">
                                 </div>
                                 <div class="divAmount">
                                     <label for="amount">Valor</label>
-                                    <input type="number" id="amount" name="valorMovimento">
+                                    <input type="number" id="amount" name="valorMovimento" step="0.01" min="0" placeholder="Ex: 10.50">
                                 </div>
                                 <div class="divDesc">
                                     <label for="desc">Descrição</label>
                                     <input type="text" id="desc" name="descricao">
                                 </div>
                                 
-                                
-                                <button id="btnSalvar">Lançar</button>
+                                <input type="hidden" name="acao" value="cadastrar">
+
+                                <button type="button" id="btnSalvar" onclick="regMovimentacao()">Lançar</button>
                             </div>
                         </div>
                     </form>

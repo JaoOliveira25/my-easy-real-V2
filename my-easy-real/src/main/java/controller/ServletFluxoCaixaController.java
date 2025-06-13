@@ -16,6 +16,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.time.format.DateTimeFormatter;
+
 import model.ModelFluxoCaixa;
 
 
@@ -72,11 +74,13 @@ public class ServletFluxoCaixaController extends HttpServlet {
 				if("cadastrar".equalsIgnoreCase(acao.trim())) {
 					
 					String dataParam = request.getParameter("dataMovimento");
+					
+					
 					String valorParam = request.getParameter("valorMovimento");
 					String tipoParam = request.getParameter("tipoMovimento");	
 					
 					
-					LocalDate dataMovimento = LocalDate.parse(dataParam);
+					LocalDate dataMovimento = LocalDate.parse(dataParam,DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 					BigDecimal  valorMovimento = new BigDecimal(valorParam);
 					char tipoMovimento = tipoParam.charAt(0);
 					String descricao = request.getParameter("descricao");
