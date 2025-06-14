@@ -6,7 +6,7 @@ let urlAction =  document.querySelector('#formMovimentacao').action;
 document.addEventListener("DOMContentLoaded", function () {
   carregarMovimentacoes();
   $("#data").inputmask("99/99/9999");
-  calcularTotaisTabela();
+  
 });
 
 async function carregarMovimentacoes(){
@@ -48,6 +48,7 @@ json.forEach(item =>{
         tbody.appendChild(row);
 });
 
+calcularTotaisTabela();
 
   }catch(error){
 	alert('Erro: '+error.message);
@@ -120,7 +121,7 @@ function calcularTotaisTabela (){
   const linhas = document.querySelectorAll("#tabelaFluxoCaixa tbody tr");
 
 linhas.forEach((linha)=>{
-  const valorTexto = linha.childre[2].textContent.replace("R$","").trim();
+  const valorTexto = linha.children[2].textContent.replace("R$","").trim();
   const valor = parseFloat(valorTexto);
 
   if(!isNaN(valor)){
