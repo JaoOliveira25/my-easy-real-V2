@@ -50,12 +50,11 @@ public class ServletLogin extends HttpServlet {
 					
 					if (urlAutenticacao == null || urlAutenticacao.equals("null")) {
 						
-						urlAutenticacao = "jsp/principal/home.jsp";
+						urlAutenticacao = "home";
 						
 					}
 					
-					RequestDispatcher redirecionar = request.getRequestDispatcher(urlAutenticacao);
-					redirecionar.forward(request, response);
+					response.sendRedirect(urlAutenticacao);
 					
 				}else {
 					RequestDispatcher redireciona = request.getRequestDispatcher("index.jsp");

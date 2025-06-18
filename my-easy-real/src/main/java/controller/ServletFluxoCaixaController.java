@@ -32,6 +32,7 @@ public class ServletFluxoCaixaController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
 			String acao = request.getParameter("acao");
+			//podemos criar uma ação para consultar uma movimentacao pelo id dela retornando os dados para o form dentro do modal antes de abrir o modal
 			if(acao != null && !acao.trim().isEmpty() && acao.equalsIgnoreCase("carregarFluxoCaixa")) {
 				//Esse único método serve para se caso o usuario somente clicar na seta que altera o mês
 				Long usuarioPaiId = (long) request.getSession().getAttribute("usuarioLogadoId");
@@ -47,8 +48,23 @@ public class ServletFluxoCaixaController extends HttpServlet {
 
 				
 				String jsonFluxoCaixa = objectMapper.writeValueAsString(fluxoCaixa);
+				
+				response.setContentType("application/json");
 				response.getWriter().write(jsonFluxoCaixa);
 		
+			} else if(acao != null && !acao.trim().isEmpty() && acao.equalsIgnoreCase("consultarMovimentacaoId")){
+				Long usuarioPaiId = (long) request.getSession().getAttribute("usuarioLogadoId");
+				Long idMovimentacao = Long.parseLong(request.getParameter("idMovimentacao"));
+				ModelFluxoCaixa movimentacao = daoFluxoCaixa.consultarMovimentacao(idMovimentacao, usuarioPaiId);
+				
+				ObjectMapper objectMapper = new ObjectMapper();
+				objectMapper.registerModule(new JavaTimeModule());
+				objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+				
+				String jsonMovimentacao = objectMapper.writeValueAsString(movimentacao);
+				response.setContentType("application/json");
+				response.getWriter().write(jsonMovimentacao);
+			
 			}
 			
 			
@@ -126,12 +142,30 @@ public class ServletFluxoCaixaController extends HttpServlet {
 					
 				}else if("deletar".equalsIgnoreCase(acao.trim())) {
 					//lógica de editar no bd método que deleta pelo ID 
+					
+					
 					String idParam = request.getParameter("idMovimentacao");
-					Long idMovimentacao = Long.parseLong(idParam);
 					
-					daoFluxoCaixa.deletarMovimentacao(idMovimentacao);
+					if(idParam != null && !idParam.trim().isEmpty()) {
+						try {
+							Long idMovimentacao = Long.parseLong(idParam);
+							
+							daoFluxoCaixa.deletarMovimentacao(idMovimentacao);
+							
+							request.getRequestDispatcher("jsp/principal/home.jsp").forward(request, response);
+							
+						} catch (NumberFormatException e) {
+							e.printStackTrace();
+					        response.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID da movimentação inválido.");
+						}
 					
-					request.getRequestDispatcher("jsp/principal/home.jsp").forward(request, response);
+					}else {
+				        response.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID da movimentação não informado.");
+					}
+					
+					
+					
+					
 				
 				}
 			}
@@ -139,17 +173,7 @@ public class ServletFluxoCaixaController extends HttpServlet {
 			e.printStackTrace();
 		}
 		
-		
-		
 	
-		
-		
-		
-		
-		
-		
-		
-		
 	}
 
 }

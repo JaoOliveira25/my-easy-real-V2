@@ -3,8 +3,9 @@ let mesAtual = dataAtual.getMonth();
 let ano = dataAtual.getFullYear();
 let urlAction =  document.querySelector('#formMovimentacao').action;
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", () => {
   carregarMovimentacoes();
+
   $("#data").inputmask("99/99/9999");
   
 });
@@ -56,10 +57,7 @@ calcularTotaisTabela();
   }
 }
 
-
-
-
-const openModalButton = document.querySelector("#open-modal-button");//o botão que vai abrir meu modal é o cadastrar
+const openModalButton = document.querySelector("#open-modal-button");
 const closeModalButton = document.querySelector("#close-modal");
 const modal = document.querySelector("#modal");
 const fade = document.querySelector("#fade");
@@ -71,9 +69,6 @@ const toggleModal = () => {
 [openModalButton, closeModalButton, fade].forEach((el)=>{
     el.addEventListener("click", ()=> toggleModal());
 })
-
-
-
 
 
 document.getElementById("amount").addEventListener("input", (event)=>{
@@ -114,6 +109,97 @@ document.getElementById("amount").addEventListener("input", (event)=>{
 
 }
 
+function openModalEditar(botao) {
+    let idMovimentacao = botao.dataset.id;
+    consultarMovimentacao(idMovimentacao);
+
+    let tituloModal = document.querySelector("#titleModal");
+    tituloModal.textContent = "Edite os dados da movimentação";
+
+    let btnSalvarOriginal = document.querySelector("#btnSalvar");
+    const novoBtnSalvar = btnSalvarOriginal.cloneNode(true);
+
+    novoBtnSalvar.addEventListener('click', function() {
+        editarMovimentacao(idMovimentacao);
+    });
+
+    btnSalvarOriginal.parentNode.replaceChild(novoBtnSalvar, btnSalvarOriginal);
+
+    
+    toggleModal();
+}
+
+
+ async function editarMovimentacao(idMovimentacao) {
+    try {
+      const url = urlAction;
+      const bodyParams = new URLSearchParams({
+	    idMovimentacao: idMovimentacao,
+	    acao: 'editar'
+     }).toString();
+
+     const form = document.querySelector('#formMovimentacao');
+     const formData = new FormData(form);
+     formData.append('acao','editar');
+
+     const response = await fetch(url, {
+      method : 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: formData
+     });
+
+     if(!response.ok){
+      throw new Error(`Erro ao editar: Status ${response.status}`);
+     }
+
+     
+    } catch (error) {
+      alert('Erro: '+error.message);
+	    console.error(error);
+    }
+  
+  }
+
+
+async function consultarMovimentacao(idMovimentacao){
+
+  try {
+
+     const url = urlAction;
+     const params = new URLSearchParams({
+	    acao: 'consultarMovimentacaoId',
+      idMovimentacao: idMovimentacao
+
+     }).toString();
+
+     const response = await fetch(`${url}?${params}`,{
+	    method:'GET',
+     });
+
+     if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+     const json = await response.json();
+
+     const form = document.querySelector('#formMovimentacao');//aqui vou pegar o form
+
+    form.querySelector('select[name="tipoMovimento"]').value = json.tipoMovimento;
+    form.querySelector('input[name="valorMovimento"]').value =  Number(json.valorMovimento).toFixed(2);
+    form.querySelector('input[name="descricao"]').value = json.descricao;
+    form.querySelector('input[name="idMovimentacao"]').value = json.id;
+    if(json.dataMovimento){
+      const dataFormatada = json.dataMovimento.split('-').reverse().join('/');
+      form.querySelector('input[name="dataMovimento"]').value = dataFormatada;
+    }
+
+  }catch(error){
+	alert('Erro: '+error.message);
+	console.error(error);
+  }
+}
+
+
 function calcularTotaisTabela (){
   let totalReceitas = 0;
   let totalDespesas = 0;
@@ -138,4 +224,37 @@ document.querySelector(".total.incomes").textContent = `R$ ${totalReceitas.toFix
 document.querySelector(".total.expenses").textContent = `R$ ${Math.abs(totalDespesas).toFixed(2)}`;
 document.querySelector(".total").textContent = `R$ ${(totalReceitas + totalDespesas).toFixed(2)}`;
 
+}
+
+async function excluirMovimentacao(botao){
+
+
+  if(confirm("Deseja mesmo deletar essa movimentação?")){
+    let url = document.getElementById("formMovimentacao").action;
+    let idMovimentacao = botao.dataset.id;
+
+    try {
+      const response = await fetch(url, {
+        method:'POST',
+        headers:{
+          'Content-Type':'application/x-www-form-urlencoded'
+        },
+        body: `idMovimentacao=${idMovimentacao}&acao=deletar`
+      });
+
+      
+      if(!response.ok){
+        const errorText = await response.text();
+        throw new Error('Erro ao deletar movimentação: ' + errorText);
+      }
+      alert("Movimentação deletada com sucesso!");
+      location.reload();
+    } catch (error) {
+      alert(error.message);
+    }
+
+    
+  }
+  
+  
 }

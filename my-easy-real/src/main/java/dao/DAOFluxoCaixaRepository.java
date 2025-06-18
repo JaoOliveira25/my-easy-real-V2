@@ -86,7 +86,7 @@ public class DAOFluxoCaixaRepository {
 	}	
 	
 	public void deletarMovimentacao(Long idMovimentacao) {
-		String sql = "DELETE FROM fluxo-caixa WHERE id = ?;";
+		String sql = "DELETE FROM fluxo_caixa WHERE id = ?;";
 		try (PreparedStatement statement = connection.prepareStatement(sql)){
 			statement.setLong(1, idMovimentacao);
 			statement.executeUpdate();
@@ -104,7 +104,7 @@ public class DAOFluxoCaixaRepository {
 
 	}
 	
-	//essa consulta com retorno é pra ser utilizado quando for editar trabalhra essa ideia
+	//essa consulta com retorno é pra ser utilizado quando for editar 
 	public ModelFluxoCaixa consultarMovimentacao(Long idMovimentacao, Long userLogado) {
 		ModelFluxoCaixa modelFluxoCaixa = new ModelFluxoCaixa();
 		
@@ -133,31 +133,7 @@ public class DAOFluxoCaixaRepository {
 	}
 	
 	
-	public List<ModelFluxoCaixa> carregarMovimentacoes(Long idUserLogado){
-		List<ModelFluxoCaixa> retornoFluxoCaixa = new ArrayList<ModelFluxoCaixa>();
-		String sql = "SELECT * FROM fluxo_caixa WHERE usuario_pai_id = ?";
-		try(PreparedStatement statement = connection.prepareStatement(sql)) {
-			statement.setLong(1, idUserLogado);
-			
-			
-			try(ResultSet result = statement.executeQuery()){
-				while(result.next()) {
-					ModelFluxoCaixa modelFluxoCaixa = new ModelFluxoCaixa();
-					modelFluxoCaixa.setId(result.getLong("id"));
-					modelFluxoCaixa.setDataMovimento(result.getDate("data_movimento").toLocalDate());
-					modelFluxoCaixa.setDescricao(result.getString("descricao"));
-					modelFluxoCaixa.setValorMovimento(result.getBigDecimal("valor_movimento"));
-					modelFluxoCaixa.setTipoMovimento(result.getString("tipo_movimento").charAt(0));
-					modelFluxoCaixa.setUsuarioPaiId(result.getLong("usuario_pai_id"));
-					retornoFluxoCaixa.add(modelFluxoCaixa);
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}		
-
-		return retornoFluxoCaixa;
-	}
+	
 	
 	public List<ModelFluxoCaixa> carregarMovimentacoes(Long idUserLogado, int mesSql, int ano ){
 		List<ModelFluxoCaixa> retornoFluxoCaixa = new ArrayList<ModelFluxoCaixa>();
