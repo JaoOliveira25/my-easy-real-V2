@@ -352,7 +352,7 @@ input, select {
 }
 
 table {
-   
+     border-collapse: collapse;
     width: 98%;
     padding: 20px 0;
     border-radius: 5px;

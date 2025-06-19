@@ -61,7 +61,7 @@
                     <!--Estou planejando aqui colocar no lugar do título um filtro de dadas-->
                     <div class="header">
                         <span>Fluxo de Caixa</span>
-                        <button id="open-modal-button">
+                        <button id="open-modal-button" onclick="openModalCadastrar()">
                             <i class="fa-solid fa-square-plus"></i>
                         </button>
                     </div>
@@ -91,7 +91,7 @@
                 <div id="fade" class="hide"></div>
                 <div id="modal" class="hide">
                     <div class="modal-header">
-                        <h2>Incluir Movimentação</h2>
+                        <h2 id="titleModal">Incluir Movimentação</h2>
                         <button id="close-modal">
                             <i class="fa-solid fa-circle-xmark"></i>
                         </button>
@@ -102,28 +102,30 @@
 
                                 <div class="divType">
                                     <label for="type">Tipo</label>
-                                    <select id="type" name="tipoMovimento">
+                                    <select id="type" name="tipoMovimento" required>
                                         <option value="E">Entrada</option>
                                         <option value="S">Saída</option>
                                     </select>
                                 </div>
 
                                 <div class="divData">
-                                    <label for="desc">Data</label>
-                                    <input type="text" id="data" placeholder="dd/mm/aaaa" name="dataMovimento" maxlength="10">
+                                    <label for="data">Data</label>
+                                    <input type="text" id="data" placeholder="dd/mm/aaaa" name="dataMovimento" maxlength="10" required>
                                 </div>
                                 <div class="divAmount">
                                     <label for="amount">Valor</label>
-                                    <input type="number" id="amount" name="valorMovimento" step="0.01" min="0" placeholder="Ex: 10.50">
+                                    <input type="number" id="amount" name="valorMovimento" step="0.01" min="0" placeholder="Ex: 10.50" required>
                                 </div>
                                 <div class="divDesc">
                                     <label for="desc">Descrição</label>
-                                    <input type="text" id="desc" name="descricao">
+                                    <input type="text" id="desc" name="descricao" required>
                                 </div>
-                                
-                                <input type="hidden" name="acao" value="cadastrar">
 
-                                <button type="button" id="btnSalvar" onclick="regMovimentacao()">Lançar</button>
+                                <input type="hidden" id="idMovimentacao" name="idMovimentacao">
+
+                                
+
+                                <button type="button" id="btnSalvar">Lançar</button>
                             </div>
                         </div>
                     </form>

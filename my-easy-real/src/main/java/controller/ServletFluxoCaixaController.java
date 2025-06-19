@@ -70,9 +70,10 @@ public class ServletFluxoCaixaController extends HttpServlet {
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			RequestDispatcher redirecionar = request.getRequestDispatcher("error.jsp");
-			request.setAttribute("msg", "Houve um erro inesperado por favor tente novamente mais tarde");
-			redirecionar.forward(request, response);
+			
+			response.setContentType("application/json");
+		    response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+		    response.getWriter().write("{\"erro\":\"Erro interno no servidor\"}");
 		}
 		
 		
@@ -84,6 +85,7 @@ public class ServletFluxoCaixaController extends HttpServlet {
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
+			
 			String acao = request.getParameter("acao");
 			
 			if(acao != null && !acao.trim().isEmpty()) {
@@ -122,7 +124,7 @@ public class ServletFluxoCaixaController extends HttpServlet {
 					String tipoParam = request.getParameter("tipoMovimento");	
 					
 					Long idMovimentacao = Long.parseLong(idParam);
-					LocalDate dataMovimento = LocalDate.parse(dataParam);
+					LocalDate dataMovimento = LocalDate.parse(dataParam,DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 					BigDecimal  valorMovimento = new BigDecimal(valorParam);
 					char tipoMovimento = tipoParam.charAt(0);
 					String descricao = request.getParameter("descricao");
@@ -138,10 +140,11 @@ public class ServletFluxoCaixaController extends HttpServlet {
 					
 					daoFluxoCaixa.editarMovimentacao(modelFluxoCaixa);
 					
-					request.getRequestDispatcher("jsp/principal/home.jsp").forward(request, response);
-					
+					//request.getRequestDispatcher("jsp/principal/home.jsp").forward(request, response);
+					response.setContentType("text/plain");
+					response.getWriter().write("ok");
 				}else if("deletar".equalsIgnoreCase(acao.trim())) {
-					//lógica de editar no bd método que deleta pelo ID 
+			
 					
 					
 					String idParam = request.getParameter("idMovimentacao");
