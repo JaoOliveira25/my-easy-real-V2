@@ -5,19 +5,24 @@ import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.Base64;
 import java.util.UUID;
+import org.apache.commons.compress.utils.IOUtils;
 
 import org.mindrot.jbcrypt.BCrypt;
 
 import dao.DAOUsuarioRepository;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Part;
 import model.ModelUsuario;
 import utils.EnviaEmail;
 
+@MultipartConfig
 @WebServlet("/ServletCadastro")
 public class ServletCadastro extends HttpServlet {
 	
@@ -30,16 +35,40 @@ public class ServletCadastro extends HttpServlet {
     }
 
 	
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+
+	
+	
 	}
 
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		
-	
+		String acao = request.getParameter("acao");
+		
+		if(acao != null && !acao.trim().isEmpty() && acao.equalsIgnoreCase("editarFoto") ) {
+			if (request.getPart("fileFoto") != null) {
+				
+				ModelUsuario modelUsuario = new ModelUsuario();
+				
+				Part part = request.getPart("fileFoto"); // Obtemos o arquivo enviado
+				
+				if (part.getSize() > 0) {
+					byte[] foto = IOUtils.toByteArray(part.getInputStream());
+					
+					String imagemBase64 = "data:image/" + part.getContentType().split("\\/")[1] + ";base64,"
+							+ Base64.getEncoder().encodeToString(foto);
+
+					modelUsuario.setFotoUser(imagemBase64);
+					
+					modelUsuario.setExtensaoFotoUser(part.getContentType().split("\\/")[1]);
+					//teriamos que pegar o id do usuario logado para preencher a foto dele
+				}
+
+			}
+		}
+
 		String nome = request.getParameter("nome");
 		String email = request.getParameter("email");
 		String senha = request.getParameter("senha");

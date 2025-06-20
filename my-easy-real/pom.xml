@@ -81,6 +81,27 @@
 			<artifactId>jackson-datatype-jsr310</artifactId>
 			<version>2.19.0</version>
 		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.tomcat</groupId>
+			<artifactId>tomcat-util</artifactId>
+			<version>11.0.6</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.apache.tomcat/tomcat-coyote -->
+		<dependency>
+			<groupId>org.apache.tomcat</groupId>
+			<artifactId>tomcat-coyote</artifactId>
+			<version>11.0.6</version>
+		</dependency>
+
+		<!--
+		https://mvnrepository.com/artifact/org.apache.commons/commons-compress -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-compress</artifactId>
+			<version>1.27.1</version>
+		</dependency>
 
 	</dependencies>
 </project>

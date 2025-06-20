@@ -117,52 +117,7 @@ function calcularTotaisTabela() {
   document.querySelector(".total").textContent = `R$ ${(totalReceitas + totalDespesas).toFixed(2)}`;
 }
 
-// ==========================
-// Cadastrar Movimentação
-// ==========================
-async function regMovimentacao() {
-  let inputType = document.querySelector("#type");
-  let inputData = document.querySelector("#data");
-  let inputAmount = document.querySelector("#amount");
-  let inputDesc = document.querySelector("#desc");
 
-  if (
-    inputType.value.trim() !== "" &&
-    inputData.value.trim() !== "" &&
-    inputAmount.value.trim() !== "" &&
-    inputDesc.value.trim() !== ""
-  ) {
-    try {
-      const url = urlAction;
-      const bodyParams = new URLSearchParams();
-
-      bodyParams.append("tipoMovimento", inputType.value);
-      bodyParams.append("dataMovimento", inputData.value);
-      bodyParams.append("valorMovimento", inputAmount.value);
-      bodyParams.append("descricao", inputDesc.value);
-      bodyParams.append("acao", "cadastrar");
-
-      const response = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: bodyParams.toString()
-      });
-
-      if (!response.ok) {
-        throw new Error(`Erro ao cadastrar: Status ${response.status}`);
-      }
-
-      alert("Movimentação cadastrada com sucesso!");
-      location.reload();
-
-    } catch (error) {
-      alert("Erro: " + error.message);
-      console.error(error);
-    }
-  } else {
-    alert("Por favor, preencha todos os campos.");
-  }
-}
 
 // ==========================
 // Abrir Modal para Cadastro
@@ -235,6 +190,56 @@ async function consultarMovimentacao(idMovimentacao) {
   }
 }
 
+
+
+// ==========================
+// Cadastrar Movimentação
+// ==========================
+async function regMovimentacao() {
+  let inputType = document.querySelector("#type");
+  let inputData = document.querySelector("#data");
+  let inputAmount = document.querySelector("#amount");
+  let inputDesc = document.querySelector("#desc");
+
+  if (
+    inputType.value.trim() !== "" &&
+    inputData.value.trim() !== "" &&
+    inputAmount.value.trim() !== "" &&
+    inputDesc.value.trim() !== ""
+  ) {
+    try {
+      const url = urlAction;
+      const bodyParams = new URLSearchParams();
+
+      bodyParams.append("tipoMovimento", inputType.value);
+      bodyParams.append("dataMovimento", inputData.value);
+      bodyParams.append("valorMovimento", inputAmount.value);
+      bodyParams.append("descricao", inputDesc.value);
+      bodyParams.append("acao", "cadastrar");
+
+      const response = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: bodyParams.toString()
+      });
+
+      if (!response.ok) {
+        throw new Error(`Erro ao cadastrar: Status ${response.status}`);
+      }
+
+      alert("Movimentação cadastrada com sucesso!");
+      location.reload();
+
+    } catch (error) {
+      alert("Erro: " + error.message);
+      console.error(error);
+    }
+  } else {
+    alert("Por favor, preencha todos os campos.");
+  }
+}
+
+
 // ==========================
 // Editar Movimentação
 // ==========================
@@ -285,6 +290,7 @@ async function editarMovimentacao() {
   }
 }
 
+
 // ==========================
 // Excluir Movimentação
 // ==========================
@@ -323,4 +329,38 @@ async function excluirMovimentacao(botao) {
       alert(error.message);
     }
   }
+}
+
+
+// ================================
+// Evento do botão de editar foto
+// ================================
+
+    function toggleMenu() {
+        document.getElementById('editProfileContainer').classList.toggle('show-menu');
+    }
+
+    // Se quiser fechar o menu clicando fora:
+    document.addEventListener('click', function(event) {
+        const container = document.getElementById('editProfileContainer');
+        if (!container.contains(event.target)) {
+            container.classList.remove('show-menu');
+        }
+    });
+
+function viewImg(fotoBase64, fileFoto){
+	let preview = document.getElementById(fotoBase64);
+	let fileFotoUser = document.getElementById(fileFoto).files[0];
+	let reader = new FileReader();
+
+	reader.onloadend = () => {
+		preview.src = reader.result;
+	}
+
+	if(fileFotoUser){
+	  reader.readAsDataURL(fileFotoUser);	
+	}else{
+	  preview.src ='${pageContext.request.contextPath}/assets/img/perfil.png';	
+	}
+
 }

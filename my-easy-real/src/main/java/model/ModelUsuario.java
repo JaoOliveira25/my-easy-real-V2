@@ -15,6 +15,11 @@ public class ModelUsuario implements Serializable {
 	private String tokenConfirmacao;
 	private Timestamp dataExpiracao;
 	private boolean usuario_confirmado;
+	private String fotoUser;
+	private String extensaoFotoUser;
+	
+	
+
 	private List<ModelFluxoCaixa> fluxoCaixa = new ArrayList<ModelFluxoCaixa>();
 
 	
@@ -74,6 +79,23 @@ public class ModelUsuario implements Serializable {
 	public void setUsuario_confirmado(boolean usuario_confirmado) {
 		this.usuario_confirmado = usuario_confirmado;
 	}
+	
+	public String getFotoUser() {
+		return fotoUser;
+	}
+
+	public void setFotoUser(String fotoUser) {
+		this.fotoUser = fotoUser;
+	}
+
+	public String getExtensaoFotoUser() {
+		return extensaoFotoUser;
+	}
+
+	public void setExtensaoFotoUser(String extensaoFotoUser) {
+		this.extensaoFotoUser = extensaoFotoUser;
+	}
+
 
 	public List<ModelFluxoCaixa> getFluxoCaixa() {
 		return fluxoCaixa;

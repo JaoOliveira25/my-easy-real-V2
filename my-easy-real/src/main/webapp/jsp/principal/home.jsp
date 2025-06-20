@@ -10,7 +10,8 @@
             <link rel="stylesheet" href="<c:url value='/assets/css/styleHome.css' />">
             <link href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css' rel='stylesheet'>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.9/jquery.inputmask.min.js"></script>
+            <script
+                src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.9/jquery.inputmask.min.js"></script>
             <script src="<c:url value='/assets/js/scriptHome.js' />" defer></script>
             <title>Home</title>
         </head>
@@ -24,7 +25,7 @@
                     </div>
 
                     <div class="campo-nome">
-                        <span class="profile-name">Seja bem vindo ao My Rasy Real</span>
+                        <span class="profile-name">Seja bem vindo ao My Real Easy </span>
                     </div>
 
                     <div class="editarPerfil">
@@ -56,9 +57,29 @@
 
                 </div>
 
+                <div id="modalProfileContainer">
+                    <form action="<%=request.getContextPath()%>/ServletCadastro" enctype="multipart/form-data">
+                        <div class="profile-edit-container" id="editProfileContainer">
+                            <img src="" id="fotoBase64">
+                            <button type="button" class="edit-button" onclick="toggleMenu()"> <i class="fa-solid fa-pen fa-sm"></i>
+                                Editar</button>
 
-                <div class="tabela-container">
-                    <!--Estou planejando aqui colocar no lugar do título um filtro de dadas-->
+                            <div class="dropdown-menu" id="dropdownMenu">
+                                <input type="file" id="fileFoto" name="fileFoto" accept="image/*"
+                                    onchange="viewImg('fotoBase64', 'fileFoto')">
+                                <a href="#">Remove photo</a>
+                            </div>
+                        </div>
+
+                        <button type="submit">Confirmar</button>
+                    </form>
+
+
+
+
+                    <!--
+                 <div class="tabela-container">
+                    
                     <div class="header">
                         <span>Fluxo de Caixa</span>
                         <button id="open-modal-button" onclick="openModalCadastrar()">
@@ -66,9 +87,9 @@
                         </button>
                     </div>
 
-                    <div id="tabelaFluxoCaixa" class="divTable"><!--Aqui vai ficar o as colunas de cada valor-->
+                    <div id="tabelaFluxoCaixa" class="divTable">
                         <table>
-                            <thead><!--Essa tag agrupa o cabeçalho de uma tabela-->
+                            <thead>
                                 <tr>
                                     <th>Data</th>
                                     <th>Descrição</th>
@@ -131,6 +152,10 @@
                     </form>
 
                 </div>
+                -->
+
+
+
 
             </main>
         </body>
