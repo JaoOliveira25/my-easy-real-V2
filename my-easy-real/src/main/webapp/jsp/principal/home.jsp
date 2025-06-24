@@ -58,7 +58,7 @@
                 </div>
 
                 <div id="modalProfileContainer">
-                    <form action="<%=request.getContextPath()%>/ServletCadastro" enctype="multipart/form-data">
+                    <form action="<%=request.getContextPath()%>/ServletCadastro" enctype="multipart/form-data" id="formPhoto">
                         <div class="profile-edit-container" id="editProfileContainer">
                             <img src="" id="fotoBase64">
                             <button type="button" class="edit-button" onclick="toggleMenu()"> <i class="fa-solid fa-pen fa-sm"></i>

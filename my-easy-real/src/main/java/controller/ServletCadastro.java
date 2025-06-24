@@ -1,14 +1,17 @@
 package controller;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Base64;
+import java.util.List;
 import java.util.UUID;
-import org.apache.commons.compress.utils.IOUtils;
 
+import org.apache.tika.Tika;
 import org.mindrot.jbcrypt.BCrypt;
 
 import dao.DAOUsuarioRepository;
@@ -48,23 +51,75 @@ public class ServletCadastro extends HttpServlet {
 		String acao = request.getParameter("acao");
 		
 		if(acao != null && !acao.trim().isEmpty() && acao.equalsIgnoreCase("editarFoto") ) {
-			if (request.getPart("fileFoto") != null) {
+			// Obtemos o arquivo enviado
+			Part part = request.getPart("fileFoto");
+			
+			if (part != null) {
 				
 				ModelUsuario modelUsuario = new ModelUsuario();
 				
-				Part part = request.getPart("fileFoto"); // Obtemos o arquivo enviado
-				
-				if (part.getSize() > 0) {
-					byte[] foto = IOUtils.toByteArray(part.getInputStream());
+				Long usuarioLogadoId = (long) request.getSession().getAttribute("usuarioLogadoId");
+
+				if (part.getSize() > 0 && part.getSize() < (2 * 1024 * 1024) ) {
+					
+					InputStream inputStream = part.getInputStream();
+					
+					Tika tika = new Tika();
+					
+					String detectedType = tika.detect(inputStream);
+					
+					List<String> tiposPermitidos = Arrays.asList("image/png", "image/jpeg", "image/gif", "image/webp");
+					
+					if (!tiposPermitidos.contains(detectedType)) {
+					    throw new ServletException("Tipo de arquivo inválido!");
+					} 
+					
+					byte[] foto = part.getInputStream().readAllBytes();
 					
 					String imagemBase64 = "data:image/" + part.getContentType().split("\\/")[1] + ";base64,"
 							+ Base64.getEncoder().encodeToString(foto);
-
+					
+					
+					modelUsuario.setId(usuarioLogadoId);
+					
 					modelUsuario.setFotoUser(imagemBase64);
 					
 					modelUsuario.setExtensaoFotoUser(part.getContentType().split("\\/")[1]);
-					//teriamos que pegar o id do usuario logado para preencher a foto dele
+
+					
+					try {
+						
+						boolean cadastroOk = daoUsuarioRepository.cadastrarUsuario(modelUsuario);
+						
+						response.setContentType("application/json");
+						
+						response.setCharacterEncoding("UTF-8");
+						
+						if(cadastroOk ) {
+					    	String json = "{\"status\":\"success\", \"message\":\"Foto atualizada com sucesso!\"}";
+					    	response.getWriter().write(json);
+					    }else {
+					    	response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+					    	String json = "{\"status\":\"error\", \"message\":\"Erro ao atualizar a foto.\"}";
+					    	response.getWriter().write(json);
+					    }
+					} catch (Exception e) {
+						
+						 e.printStackTrace();
+
+						    response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+						    response.setContentType("application/json");
+						    response.setCharacterEncoding("UTF-8");
+
+						    String json = "{\"status\":\"error\", \"message\":\"Ocorreu um erro no servidor.\"}";
+						    response.getWriter().write(json);
+						
+					}
+					
+				}else { // Limite de 2MB
+					throw new ServletException("Arquivo muito grande! O tamanho máximo permitido é 2MB.");
 				}
+				
 
 			}
 		}

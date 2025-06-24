@@ -364,3 +364,38 @@ function viewImg(fotoBase64, fileFoto){
 	}
 
 }
+
+document.querySelector("#formPhoto").addEventListener("submit", async (event) => {
+  
+  event.preventDefault();
+  
+  const formData = new FormData(this);
+
+  formData.append("acao","editarFoto");
+
+  const urlAction = this.action;
+
+  try {
+    
+    const response = await fetch(urlAction, {
+      method: "POST",
+      body: formData
+    })
+
+    const resultado = await response.json();
+
+    if(resultado.status === "success"){
+      alert(resultado.message);
+      //logica que atualiza a foto do perfil
+    }else{
+      alert("Erro: "+ resultado.message);
+    }
+
+
+  } catch (error) {
+    console.error("Erro na requisição : ", error);
+    alert("Falha na comunicação com o servidor");
+  }
+
+
+});
