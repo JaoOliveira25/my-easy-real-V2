@@ -21,7 +21,7 @@
 
                 <div class="profile-container">
                     <div class="profile-photo">
-                        <img src="${pageContext.request.contextPath}/assets/img/perfil.png" alt="">
+                        <img id="profilePhotoPrincipal" src="${pageContext.request.contextPath}/assets/img/perfil.png" alt="">
                     </div>
 
                     <div class="campo-nome">
@@ -58,7 +58,7 @@
                 </div>
 
                 <div id="modalProfileContainer">
-                    <form action="<%=request.getContextPath()%>/ServletCadastro" enctype="multipart/form-data" id="formPhoto">
+                    <form action="<%=request.getContextPath()%>/ServletCadastro" enctype="multipart/form-data" id="formPhoto" method="post">
                         <div class="profile-edit-container" id="editProfileContainer">
                             <img src="" id="fotoBase64">
                             <button type="button" class="edit-button" onclick="toggleMenu()"> <i class="fa-solid fa-pen fa-sm"></i>
@@ -69,6 +69,7 @@
                                     onchange="viewImg('fotoBase64', 'fileFoto')">
                                 <a href="#">Remove photo</a>
                             </div>
+                            <input type="hidden" value="editarFoto" name="acao">
                         </div>
 
                         <button type="submit">Confirmar</button>

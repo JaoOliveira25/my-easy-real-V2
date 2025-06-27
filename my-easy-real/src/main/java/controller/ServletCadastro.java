@@ -32,14 +32,41 @@ public class ServletCadastro extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	DAOUsuarioRepository daoUsuarioRepository = new DAOUsuarioRepository();
 	
-    public ServletCadastro() {
-        super();
-        
-    }
-
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+		try {
+			String acao = request.getParameter("acao");
+			
+			if(acao != null && !acao.trim().isEmpty() && acao.equalsIgnoreCase("carregarFoto")) {
+				Long usuarioPaiId = (long) request.getSession().getAttribute("usuarioLogadoId");
+				ModelUsuario modelUsuario = daoUsuarioRepository.consultarUsuarioById(usuarioPaiId);
+				String fotoBase64 = modelUsuario.getFotoUser();
+				
+				response.setContentType("application/json");
+				
+				response.setCharacterEncoding("UTF-8");
+				
+				if(fotoBase64 != null && !fotoBase64.trim().isEmpty()) {
+					String json = "{\"status\":\"success\", \"src\":\"" + fotoBase64 + "\"}";
+			    	response.getWriter().write(json);
+				}else {
+					String json = "{\"status\":\"success\", \"src\":\"${pageContext.request.contextPath}/assets/img/perfil.png\"}";
+			    	response.getWriter().write(json);
+				}
+				
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
 
+		    response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+		    response.setContentType("application/json");
+		    response.setCharacterEncoding("UTF-8");
+
+		    String json = "{\"status\":\"error\", \"message\":\"Ocorreu um erro no servidor.\"}";
+		    response.getWriter().write(json);
+		
+		}
 	
 	
 	}
@@ -51,7 +78,7 @@ public class ServletCadastro extends HttpServlet {
 		String acao = request.getParameter("acao");
 		
 		if(acao != null && !acao.trim().isEmpty() && acao.equalsIgnoreCase("editarFoto") ) {
-			// Obtemos o arquivo enviado
+			
 			Part part = request.getPart("fileFoto");
 			
 			if (part != null) {
@@ -89,7 +116,7 @@ public class ServletCadastro extends HttpServlet {
 					
 					try {
 						
-						boolean cadastroOk = daoUsuarioRepository.cadastrarUsuario(modelUsuario);
+						boolean cadastroOk = daoUsuarioRepository.editarFotoUser(modelUsuario);
 						
 						response.setContentType("application/json");
 						
@@ -122,67 +149,69 @@ public class ServletCadastro extends HttpServlet {
 				
 
 			}
-		}
+		}else if (acao != null && !acao.trim().isEmpty() && acao.equalsIgnoreCase("cadastrarUsuario")) {
+			String nome = request.getParameter("nome");
+			String email = request.getParameter("email");
+			String senha = request.getParameter("senha");
+			String senha_hash = BCrypt.hashpw(senha, BCrypt.gensalt());
+			String token = UUID.randomUUID().toString();
+			Timestamp dataExpiracao = Timestamp.valueOf(LocalDateTime.now().plusHours(24));
+			String mensagemResponse;
+			
+			boolean cadastroOk = false;
+			
+			
+			ModelUsuario modelUsuario = new ModelUsuario();
+			modelUsuario.setNome(nome);
+			modelUsuario.setEmail(email);
+			modelUsuario.setSenha(senha_hash);
+			modelUsuario.setTokenConfirmacao(token);
+			modelUsuario.setDataExpiracao(dataExpiracao);
+					
+			response.setContentType("application/json");
+	        response.setCharacterEncoding("UTF-8");
+	        
+			PrintWriter saida = response.getWriter();
+			
+			try {
+				cadastroOk = daoUsuarioRepository.cadastrarUsuario(modelUsuario);
+				
+				
+				
+				if(cadastroOk) {
+					
+					
+					String linkConfirmacao = "http://localhost:8080/my-easy-real/ServletConfirmaCadastro?token="+modelUsuario.getTokenConfirmacao()+"&email="+modelUsuario.getEmail();
+					String listaDestinatarios = modelUsuario.getEmail();
+					String remetente = "My Easy Real";
+					String assuntoEmail = "Confirmação de cadastro";
+					StringBuilder stringBuilderHtml = new StringBuilder();
+					
+					stringBuilderHtml.append("<p> Clique no link para confirmar seu cadastro: <a href=\""+linkConfirmacao+"\">Confirmar cadastro</a></p><br/><br/>");
+					EnviaEmail enviaEmail = new EnviaEmail(listaDestinatarios,remetente,assuntoEmail,stringBuilderHtml.toString());
+					enviaEmail.enviarEmail(true);
+					
+					response.setStatus(HttpServletResponse.SC_OK);//status 200
+					
+					saida.println("{\"mensagem\": \"Cadastro iniciado! Enviamos um link de confirmação para seu email "+modelUsuario.getEmail()+", não esqueça de olhar sua caixa de span.\"}");
+				
+				}else {
+					response.setStatus(HttpServletResponse.SC_BAD_REQUEST);//status 400
+					mensagemResponse = "Erro ao cadastrar Usuário tente novamente!  ";
+					saida.println("{\"mensagem\": "+mensagemResponse+"}");
 
-		String nome = request.getParameter("nome");
-		String email = request.getParameter("email");
-		String senha = request.getParameter("senha");
-		String senha_hash = BCrypt.hashpw(senha, BCrypt.gensalt());
-		String token = UUID.randomUUID().toString();
-		Timestamp dataExpiracao = Timestamp.valueOf(LocalDateTime.now().plusHours(24));
-		String mensagemResponse;
-		
-		boolean cadastroOk = false;
-		
-		
-		ModelUsuario modelUsuario = new ModelUsuario();
-		modelUsuario.setNome(nome);
-		modelUsuario.setEmail(email);
-		modelUsuario.setSenha(senha_hash);
-		modelUsuario.setTokenConfirmacao(token);
-		modelUsuario.setDataExpiracao(dataExpiracao);
-				
-		response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        
-		PrintWriter saida = response.getWriter();
-		
-		try {
-			cadastroOk = daoUsuarioRepository.cadastrarUsuario(modelUsuario);
-			
-			
-			
-			if(cadastroOk) {
-				
-				
-				String linkConfirmacao = "http://localhost:8080/my-easy-real/ServletConfirmaCadastro?token="+modelUsuario.getTokenConfirmacao()+"&email="+modelUsuario.getEmail();
-				String listaDestinatarios = modelUsuario.getEmail();
-				String remetente = "My Easy Real";
-				String assuntoEmail = "Confirmação de cadastro";
-				StringBuilder stringBuilderHtml = new StringBuilder();
-				
-				stringBuilderHtml.append("<p> Clique no link para confirmar seu cadastro: <a href=\""+linkConfirmacao+"\">Confirmar cadastro</a></p><br/><br/>");
-				EnviaEmail enviaEmail = new EnviaEmail(listaDestinatarios,remetente,assuntoEmail,stringBuilderHtml.toString());
-				enviaEmail.enviarEmail(true);
-				
-				response.setStatus(HttpServletResponse.SC_OK);//status 200
-				
-				saida.println("{\"mensagem\": \"Cadastro iniciado! Enviamos um link de confirmação para seu email "+modelUsuario.getEmail()+", não esqueça de olhar sua caixa de span.\"}");
-			
-			}else {
-				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);//status 400
+				}
+			} catch (SQLException e) {
 				mensagemResponse = "Erro ao cadastrar Usuário tente novamente!  ";
 				saida.println("{\"mensagem\": "+mensagemResponse+"}");
-
+				
+			    return;
 			}
-		} catch (SQLException e) {
-			mensagemResponse = "Erro ao cadastrar Usuário tente novamente!  ";
-			saida.println("{\"mensagem\": "+mensagemResponse+"}");
 			
-		    return;
+			saida.flush();
 		}
+
 		
-		saida.flush();
 
 	}
 

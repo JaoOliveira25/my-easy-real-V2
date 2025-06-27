@@ -14,6 +14,7 @@ const fade = document.querySelector("#fade");
 // Eventos iniciais (DOMContentLoaded)
 // ==========================
 document.addEventListener("DOMContentLoaded", () => {
+  carregarFoto()
   carregarMovimentacoes();
   $("#data").inputmask("99/99/9999");
 });
@@ -94,6 +95,7 @@ async function carregarMovimentacoes() {
 // ==========================
 // Calcular Totais da Tabela
 // ==========================
+
 function calcularTotaisTabela() {
   let totalReceitas = 0;
   let totalDespesas = 0;
@@ -365,13 +367,11 @@ function viewImg(fotoBase64, fileFoto){
 
 }
 
-document.querySelector("#formPhoto").addEventListener("submit", async (event) => {
+document.querySelector("#formPhoto").addEventListener("submit", async  function(event) {
   
   event.preventDefault();
   
   const formData = new FormData(this);
-
-  formData.append("acao","editarFoto");
 
   const urlAction = this.action;
 
@@ -386,7 +386,7 @@ document.querySelector("#formPhoto").addEventListener("submit", async (event) =>
 
     if(resultado.status === "success"){
       alert(resultado.message);
-      //logica que atualiza a foto do perfil
+      //logica que atualiza a foto do perfil sem dar  um reload
     }else{
       alert("Erro: "+ resultado.message);
     }
@@ -399,3 +399,31 @@ document.querySelector("#formPhoto").addEventListener("submit", async (event) =>
 
 
 });
+
+async function carregarFoto() {
+  try{
+	const url = document.querySelector("#formPhoto").action; 
+	const params = new URLSearchParams({
+	   acao: "carregarFoto"
+	}).toString();
+	
+	const response = await fetch(`${url}?${params}`, {method: 'GET'});
+
+	if (!response.ok) {
+      throw new Error("Erro ao carregar a imagem.");
+    }
+
+	const json = await response.json();
+	const campoFoto = document.querySelector("#profilePhotoPrincipal");/*seleciona o <img id="profilePhotoPrincipal" src="${pageContext.request.contextPath}/assets/img/perfil.png" alt="">*/
+  
+	if (json.src) {
+      campoFoto.src = json.src;
+    }
+	
+  }catch (error) {
+    alert('Erro: ' + error.message);
+    console.error(error);
+  }
+
+
+}

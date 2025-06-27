@@ -157,6 +157,9 @@ public class DAOUsuarioRepository {
 					modelUsuario.setNome(result.getString("nome"));
 					modelUsuario.setEmail(result.getString("email"));
 					modelUsuario.setSenha(result.getString("senha"));
+					modelUsuario.setFotoUser(result.getString("foto_user"));
+					modelUsuario.setExtensaoFotoUser(result.getString("extensao_foto_user"));
+
 				} else {
 					return null;
 				}
