@@ -21,11 +21,11 @@
 
                 <div class="profile-container">
                     <div class="profile-photo">
-                        <img id="profilePhotoPrincipal" src="${pageContext.request.contextPath}/assets/img/perfil.png" alt="">
+                        <img id="profilePhotoPrincipal" src="" alt="Foto de perfil" >
                     </div>
 
                     <div class="campo-nome">
-                        <span class="profile-name">Seja bem vindo ao My Real Easy </span>
+                        <span class="profile-name">Seja bem vindo ao My Easy Real </br><strong id="campoNome"></strong></span>
                     </div>
 
                     <div class="editarPerfil">
@@ -34,10 +34,7 @@
                     </div>
                 </div>
 
-
-
-
-
+               
 
                 <div class="resume-container">
 
@@ -57,28 +54,8 @@
 
                 </div>
 
-                <div id="modalProfileContainer">
-                    <form action="<%=request.getContextPath()%>/ServletCadastro" enctype="multipart/form-data" id="formPhoto" method="post">
-                        <div class="profile-edit-container" id="editProfileContainer">
-                            <img src="" id="fotoBase64">
-                            <button type="button" class="edit-button" onclick="toggleMenu()"> <i class="fa-solid fa-pen fa-sm"></i>
-                                Editar</button>
+               
 
-                            <div class="dropdown-menu" id="dropdownMenu">
-                                <input type="file" id="fileFoto" name="fileFoto" accept="image/*"
-                                    onchange="viewImg('fotoBase64', 'fileFoto')">
-                                <a href="#">Remove photo</a>
-                            </div>
-                            <input type="hidden" value="editarFoto" name="acao">
-                        </div>
-
-                        <button type="submit">Confirmar</button>
-                    </form>
-
-
-
-
-                    <!--
                  <div class="tabela-container">
                     
                     <div class="header">
@@ -107,13 +84,33 @@
                     </div>
 
                 </div>
+ 
+                 <div id="fadeModalProfileContainer" class="hide"></div>
 
+                <div id="modalProfileContainer" class="hide">
 
+                    <form action="<%=request.getContextPath()%>/ServletCadastro" enctype="multipart/form-data" id="formPhoto" method="post">
+                        <div class="profile-edit-container" id="editProfileContainer">
+                            <img src="" id="fotoBase64">
+                            <button type="button" class="edit-button" onclick="toggleMenu()"> <i class="fa-solid fa-pen fa-sm"></i>
+                                Editar</button>
+
+                            <div class="dropdown-menu" id="dropdownMenu">
+                                <input type="file" id="fileFoto" name="fileFoto" accept="image/*"
+                                    onchange="viewImg('fotoBase64', 'fileFoto')">
+                                <a href="#">Remove photo</a>
+                            </div>
+                            <input type="hidden" value="editarFoto" name="acao">
+                        </div>
+
+                        <button type="submit">Confirmar</button>
+                    </form>
+                </div>
 
                 <div id="fade" class="hide"></div>
                 <div id="modal" class="hide">
                     <div class="modal-header">
-                        <h2 id="titleModal">Incluir Movimentação</h2>
+                        <h2 id="titleModal">Cadastrar Movimentação</h2>
                         <button id="close-modal">
                             <i class="fa-solid fa-circle-xmark"></i>
                         </button>
@@ -127,7 +124,7 @@
                                     <select id="type" name="tipoMovimento" required>
                                         <option value="E">Entrada</option>
                                         <option value="S">Saída</option>
-                                    </select>
+                                    </select>      
                                 </div>
 
                                 <div class="divData">
@@ -153,7 +150,7 @@
                     </form>
 
                 </div>
-                -->
+               
 
 
 

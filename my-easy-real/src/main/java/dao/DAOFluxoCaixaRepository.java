@@ -62,7 +62,7 @@ public class DAOFluxoCaixaRepository {
 	}
 	
 	public void editarMovimentacao(ModelFluxoCaixa modelFluxoCaixa) {
-		String sql = "UPDATE fluxo_caixa SET  data_movimento=?, descricao=?, valor_movimento=?, tipo_movimento=?, usuario_pai_id=? WHERE id=?;";
+		String sql = "UPDATE fluxo_caixa SET data_movimento=?, descricao=?, valor_movimento=?, tipo_movimento=?, usuario_pai_id=? WHERE id=?;";
 		
 		try(PreparedStatement statement = connection.prepareStatement(sql)){
 			statement.setDate(1, Date.valueOf(modelFluxoCaixa.getDataMovimento()));
@@ -74,6 +74,7 @@ public class DAOFluxoCaixaRepository {
 			
 			statement.executeUpdate();
 			connection.commit();
+			
 		}catch (Exception e) {
 			e.printStackTrace();
 	        try {

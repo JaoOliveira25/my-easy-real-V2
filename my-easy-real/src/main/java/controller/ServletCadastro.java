@@ -14,6 +14,8 @@ import java.util.UUID;
 import org.apache.tika.Tika;
 import org.mindrot.jbcrypt.BCrypt;
 
+import com.google.gson.JsonObject;
+
 import dao.DAOUsuarioRepository;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -41,16 +43,28 @@ public class ServletCadastro extends HttpServlet {
 				Long usuarioPaiId = (long) request.getSession().getAttribute("usuarioLogadoId");
 				ModelUsuario modelUsuario = daoUsuarioRepository.consultarUsuarioById(usuarioPaiId);
 				String fotoBase64 = modelUsuario.getFotoUser();
+				String nome = modelUsuario.getNome().split(" ")[0];
 				
 				response.setContentType("application/json");
 				
 				response.setCharacterEncoding("UTF-8");
 				
+				JsonObject jsonObject = new JsonObject();
+				jsonObject.addProperty("status", "success");
+				jsonObject.addProperty("nome", nome);
+				
 				if(fotoBase64 != null && !fotoBase64.trim().isEmpty()) {
-					String json = "{\"status\":\"success\", \"src\":\"" + fotoBase64 + "\"}";
+					
+					jsonObject.addProperty("src", fotoBase64);
+		
+					String json = jsonObject.toString();
 			    	response.getWriter().write(json);
 				}else {
-					String json = "{\"status\":\"success\", \"src\":\"${pageContext.request.contextPath}/assets/img/perfil.png\"}";
+					
+					String contextPath = request.getContextPath();
+					String imgPadraoPath = contextPath + "/assets/img/perfil.png";
+					jsonObject.addProperty("src", imgPadraoPath );
+					String json = jsonObject.toString();
 			    	response.getWriter().write(json);
 				}
 				

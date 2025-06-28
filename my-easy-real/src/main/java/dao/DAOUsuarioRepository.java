@@ -147,7 +147,7 @@ public class DAOUsuarioRepository {
 	public ModelUsuario consultarUsuarioById(Long idUsuarioLogado) throws Exception {
 		ModelUsuario modelUsuario = new ModelUsuario();
 
-		String sql = "SELECT * FROM usuarios WHERE upper(email) = upper(?);";
+		String sql = "SELECT * FROM usuarios WHERE id = ?;";
 		try (PreparedStatement statement = connection.prepareStatement(sql)) {
 			statement.setLong(1, idUsuarioLogado);
 
@@ -156,7 +156,6 @@ public class DAOUsuarioRepository {
 					modelUsuario.setId(result.getLong("id"));
 					modelUsuario.setNome(result.getString("nome"));
 					modelUsuario.setEmail(result.getString("email"));
-					modelUsuario.setSenha(result.getString("senha"));
 					modelUsuario.setFotoUser(result.getString("foto_user"));
 					modelUsuario.setExtensaoFotoUser(result.getString("extensao_foto_user"));
 
@@ -164,6 +163,7 @@ public class DAOUsuarioRepository {
 					return null;
 				}
 			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			try {

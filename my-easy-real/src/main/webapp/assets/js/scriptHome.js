@@ -7,14 +7,20 @@ let ano = dataAtual.getFullYear();
 let urlAction = document.querySelector('#formMovimentacao').action;
 
 const closeModalButton = document.querySelector("#close-modal");
+
 const modal = document.querySelector("#modal");
 const fade = document.querySelector("#fade");
+
+
+const modalProfileContainer =  document.querySelector("#modalProfileContainer");
+const imgPerfilClick = document.querySelector("#profilePhotoPrincipal");
+const fadeModalProfileContainer = document.querySelector("#fadeModalProfileContainer");
 
 // ==========================
 // Eventos iniciais (DOMContentLoaded)
 // ==========================
 document.addEventListener("DOMContentLoaded", () => {
-  carregarFoto()
+  carregarFoto();
   carregarMovimentacoes();
   $("#data").inputmask("99/99/9999");
 });
@@ -31,6 +37,29 @@ const toggleModal = () => {
 });
 
 // ==========================
+// Controle de Modal da foto 
+// ==========================
+
+const toogleModalImg = () => {
+  [modalProfileContainer, fadeModalProfileContainer].forEach((el) => el.classList.toggle("hide"));
+}
+
+[fadeModalProfileContainer].forEach((el) => {
+  el.addEventListener("click", () => toogleModalImg());
+});
+
+imgPerfilClick.addEventListener("click", () =>{
+  toogleModalImg();
+})
+
+fadeModalProfileContainer.addEventListener("click", () =>{
+  modalProfileContainer.classList.add("hide");
+  fadeModalProfileContainer.classList.add("hide");
+
+})
+
+
+// ==========================
 // Máscara e Limitação de Casas Decimais
 // ==========================
 document.getElementById("amount").addEventListener("input", (event) => {
@@ -44,8 +73,42 @@ document.getElementById("amount").addEventListener("input", (event) => {
 });
 
 // ==========================
-// Carregar Movimentações
+// Carregamentos
 // ==========================
+async function carregarFoto() {
+  try{
+	const url = document.querySelector("#formPhoto").action; 
+	const params = new URLSearchParams({
+	   acao: "carregarFoto"
+	}).toString();
+	
+	const response = await fetch(`${url}?${params}`, {method: 'GET'});
+
+	if (!response.ok) {
+      throw new Error("Erro ao carregar a imagem.");
+    }
+
+	const json = await response.json();
+  console.log(json); 
+	const campoFoto = document.querySelector("#profilePhotoPrincipal");/*seleciona o <img id="profilePhotoPrincipal" src="${pageContext.request.contextPath}/assets/img/perfil.png" alt="">*/
+  const campoNome = document.querySelector("#campoNome");
+  
+	if (json.src) {
+      campoFoto.src = json.src;
+    }
+
+  if (json.nome) {
+      campoNome.textContent = json.nome;
+  }
+	
+  }catch (error) {
+    alert('Erro: ' + error.message);
+    console.error(error);
+  }
+
+
+}
+
 async function carregarMovimentacoes() {
   try {
     const url = urlAction;
@@ -246,6 +309,7 @@ async function regMovimentacao() {
 // Editar Movimentação
 // ==========================
 async function editarMovimentacao() {
+  
   let inputType = document.querySelector("#type");
   let inputData = document.querySelector("#data");
   let inputAmount = document.querySelector("#amount");
@@ -386,7 +450,7 @@ document.querySelector("#formPhoto").addEventListener("submit", async  function(
 
     if(resultado.status === "success"){
       alert(resultado.message);
-      //logica que atualiza a foto do perfil sem dar  um reload
+      carregarFoto();
     }else{
       alert("Erro: "+ resultado.message);
     }
@@ -400,30 +464,4 @@ document.querySelector("#formPhoto").addEventListener("submit", async  function(
 
 });
 
-async function carregarFoto() {
-  try{
-	const url = document.querySelector("#formPhoto").action; 
-	const params = new URLSearchParams({
-	   acao: "carregarFoto"
-	}).toString();
-	
-	const response = await fetch(`${url}?${params}`, {method: 'GET'});
 
-	if (!response.ok) {
-      throw new Error("Erro ao carregar a imagem.");
-    }
-
-	const json = await response.json();
-	const campoFoto = document.querySelector("#profilePhotoPrincipal");/*seleciona o <img id="profilePhotoPrincipal" src="${pageContext.request.contextPath}/assets/img/perfil.png" alt="">*/
-  
-	if (json.src) {
-      campoFoto.src = json.src;
-    }
-	
-  }catch (error) {
-    alert('Erro: ' + error.message);
-    console.error(error);
-  }
-
-
-}

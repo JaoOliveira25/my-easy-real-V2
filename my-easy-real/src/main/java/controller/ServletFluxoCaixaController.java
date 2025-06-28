@@ -130,11 +130,11 @@ public class ServletFluxoCaixaController extends HttpServlet {
 					Long usuarioPaiId = (Long) request.getSession(false).getAttribute("usuarioLogadoId");
 					
 					ModelFluxoCaixa modelFluxoCaixa = new ModelFluxoCaixa();
+					modelFluxoCaixa.setTipoMovimento(tipoMovimento);
 					modelFluxoCaixa.setId(idMovimentacao);
 					modelFluxoCaixa.setDataMovimento(dataMovimento);
 					modelFluxoCaixa.setDescricao(descricao);
 					modelFluxoCaixa.setValorMovimento(valorMovimento);
-					modelFluxoCaixa.setTipoMovimento(tipoMovimento);
 					modelFluxoCaixa.setUsuarioPaiId(usuarioPaiId);
 					
 					daoFluxoCaixa.editarMovimentacao(modelFluxoCaixa);
@@ -142,6 +142,7 @@ public class ServletFluxoCaixaController extends HttpServlet {
 					//request.getRequestDispatcher("jsp/principal/home.jsp").forward(request, response);
 					response.setContentType("text/plain");
 					response.getWriter().write("ok");
+					
 				}else if("deletar".equalsIgnoreCase(acao.trim())) {
 			
 					
